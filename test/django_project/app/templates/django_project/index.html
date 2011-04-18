@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nope Chat</title>
+    
+    <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+    <script src="{{ NOPE_HOST }}/socket.io/socket.io.js"></script>
+    <script src="{{ NOPE_HOST }}/nope-client.js"></script>
+    <script>
+      $(function(){
+        var client = new NopeClient('localhost', 6868);
+        var client_id = 'user' + parseInt(Math.random() * 1000000, 10);
+        client.register(client_id, 'testpwd', function(data){
+          client.subscribe('chat', function(data){})
+        });
+
+        client.on('msg', function(data){
+          var msg = data.client_id + ': ' + data.text;
+          $('#messages ul').append('<li>' + msg + '</li>')
+        })        
+        
+        
+        $('html').ajaxSend(function(event, xhr, settings) {
+          function getCookie(name) {
+              var cookieValue = null;
+              if (document.cookie && document.cookie != '') {
+                  var cookies = document.cookie.split(';');
+                  for (var i = 0; i < cookies.length; i++) {
+                      var cookie = jQuery.trim(cookies[i]);
+                      // Does this cookie string begin with the name we want?
+                      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                          break;
+                      }
+                  }
+              }
+              return cookieValue;
+          }
+          if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+              // Only send the token to relative URLs i.e. locally.
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        });
+        
+        
+        $('#send-button').click(function(){
+          var txt = $('#message').val();   
+          $.ajax({
+            'url': '/send_message',
+            'type': 'post',
+            'data': {
+              'user_name': client_id,
+              'text': txt
+            }
+          })
+        });
+        
+      })
+    </script>
+  </head>
+  <body>
+    
+    <div id="messages">
+      <h2>Recent Messages</h2>
+      <ul></ul>
+    </div>
+    
+    <div>
+      <h2>Post</h2>
+      <input type="text" value="" id="message" />      
+      <button id="send-button">Send</button>
+    </div>
+    
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+    <script>WEB_SOCKET_SWF_LOCATION='http://localhost:6868/socket.io/lib/vendor/web-socket-js/WebSocketMain.swf'</script>
+    <script src="http://localhost:6868/socket.io/socket.io.js"></script>
+    <script src="http://localhost:6868/nope-client.js"></script>
+    <script>
+      $(function(){
+        var client = new NopeClient('localhost', 6868);
+        var client_id = 'user' + parseInt(Math.random() * 1000000, 10);
+        client.register(client_id, 'testpwd', function(data){
+          client.subscribe('chan', function(data){})
+        });
+        
+        $('#send-button').click(function(){
+          var txt = $('#message').val();   
+          client.push('pwd', client_id, 'chan', 'msg', {'text': txt});
+        });
+        
+        client.on('msg', function(data){
+          var msg = data.client_id + ': ' + data.text;
+          $('#messages ul').append('<li>' + msg + '</li>')
+        })        
+      })
+    </script>
+  </head>
+  <body>
+    
+    <div id="messages">
+      <h2>Recent Messages</h2>
+      <ul></ul>
+    </div>
+    
+    <div>
+      <h2>Post</h2>
+      <input type="text" value="" id="message" />      
+      <button id="send-button">Send</button>
+    </div>
+    
+  </body>
+</html>
