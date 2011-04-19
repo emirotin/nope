@@ -6,7 +6,7 @@ Nope is NOde.js Push Engine - a bit of glue building APE-Project-like experience
 What for?
 ===========
 
-Well, for Ajax Push aka Comet. It makes it possible for some data / events source (say, you weather informer service) to push the data to your clients (say, widgets instaled to various sites which you don't want polling from your site).
+Well, for Ajax Push aka Comet. It makes it possible for some data / events source (say, your weather informer service) to push the data to your clients (say, widgets instaled to various sites which you don't want polling from your site).
 
 Terminology and abstraction overview
 ====================================
