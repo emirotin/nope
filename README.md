@@ -89,7 +89,7 @@ In case of HTTP push your service has to POST to http://NOPE_HOST:NOPE_PORT/push
 
     client.on('msg', function(data){
         var msg = data.client_id + ': ' + data.text;                 // client_id is provided by the Nope server. It makes sense if the data push is client-related, like in chat apps
-        $('#messages ul').append('<li>' + msg + '</li>')         // data.text is the the custom field specified by the Data source
+        $('#messages ul').append('<li>' + msg + '</li>')             // data.text is the the custom field specified by the Data source
     })
     
 4.4. Set your data source
