@@ -9,6 +9,7 @@ function NopeClient(server, port) {
 	var self = this;
 	this._socket.on('message', function(message) {
 		self.fire(message.type, message.body);
+		self.fire('all', message.body);
 	});
 };
 
