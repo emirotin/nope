@@ -1,6 +1,8 @@
 /**
  * @author Eugene Mirotin
  */
+ 
+/* global io: false */
 
 function NopeClient(server, port) {
     this._socket = new io.Socket(server, {'port': port, 'connectTimeout': 3000});
@@ -11,23 +13,25 @@ function NopeClient(server, port) {
         self.fire(message.type, message.body);
         self.fire('all', message.body);
     });
-};
+}
 
 NopeClient.prototype.on = function(event, cb) {
-    if (!(event in this._handlers)) {
+    if (this._handlers[event] === undefined) {
         this._handlers[event] = [];
     }
     this._handlers[event].push(cb);
-}
+};
 
 NopeClient.prototype.fire = function(event, data) {
-    if (!(event in this._handlers)){
+    var i, h, l;
+    
+    if (this._handlers[event] === undefined){
         return;
     }
-    for (var i = 0, h = this._handlers[event], l = h.length; i < l; i++) {
+    for (i = 0, h = this._handlers[event], l = h.length; i < l; i++) {
         h[i](data);
     }
-}
+};
 
 NopeClient.prototype.register = function(client_id, password, cb) {
     this.on('registration', cb);
@@ -38,7 +42,7 @@ NopeClient.prototype.register = function(client_id, password, cb) {
             'password': password
           }
     });
-}
+};
 
 NopeClient.prototype.subscribe = function(channel, cb) {
     this.on('subscription', cb);
@@ -48,7 +52,7 @@ NopeClient.prototype.subscribe = function(channel, cb) {
             'channel': channel
         }
     });
-}
+};
 
 NopeClient.prototype.push = function(password, client_id, channel, type, body) {
     this._socket.send({
@@ -61,4 +65,4 @@ NopeClient.prototype.push = function(password, client_id, channel, type, body) {
             'body': body
           }
     });
-}
+};
