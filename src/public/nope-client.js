@@ -2,7 +2,7 @@
  * @author Eugene Mirotin
  */
  
-/* global io: false */
+var io;
 
 function NopeClient(server, port) {
     this._socket = new io.Socket(server, {'port': port, 'connectTimeout': 3000});
