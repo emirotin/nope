@@ -132,7 +132,7 @@ Nope Client Events
 
 1) Predefined events
 
-1.1. `registration` event is fired when the server reaction to your `.register` call arrives.
+1.1. `registration` event is fired when the server reaction to your `.register` call.
 
 `data` has the following attributes
 
