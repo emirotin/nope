@@ -4,6 +4,5 @@
 
 exports.settings = {
 	'get_password': 'testpwd',
-  'put_password': 'pwd',
-	
+	'put_password': 'pwd',	
 }

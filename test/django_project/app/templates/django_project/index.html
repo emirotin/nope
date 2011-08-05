@@ -4,14 +4,14 @@
     <title>Nope Chat</title>
     
     <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
-    <script src="{{ NOPE_HOST }}/socket.io.js"></script>
+    <script src="{{ NOPE_HOST }}/socket.io/socket.io.js"></script>
     <script src="{{ NOPE_HOST }}/nope-client.js"></script>
     <script>
       $(function(){
-        var client = new NopeClient('localhost', 6868);
-        var client_id = 'user' + parseInt(Math.random() * 1000000, 10);
-        client.register(client_id, 'testpwd', function(data){
-          client.subscribe('chat', function(data){})
+        var client = new NopeClient('localhost', 6868),
+            client_id = 'user' + parseInt(Math.random() * 1000000, 10);
+        client.register(client_id, function(data){
+          client.subscribe('chat', 'testpwd', function(data){})
         });
 
         client.on('msg', function(data){

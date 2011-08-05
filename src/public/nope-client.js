@@ -37,23 +37,23 @@ NopeClient.prototype.fire = function(event, data) {
     }
 };
 
-NopeClient.prototype.register = function(client_id, password, cb) {
+NopeClient.prototype.register = function(client_id, cb) {
     this.on('registration', cb);
     this._socket.json.send({
         'type': 'register',
         'body': {
-            'client_id': client_id,
-            'password': password
-          }
+            'client_id': client_id
+        }
     });
 };
 
-NopeClient.prototype.subscribe = function(channel, cb) {
+NopeClient.prototype.subscribe = function(channel, password, cb) {
     this.on('subscription', cb);
     this._socket.json.send({
         'type': 'subscribe',
         'body': {
-            'channel': channel
+            'channel': channel,
+            'password': password
         }
     });
 };

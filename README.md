@@ -27,8 +27,8 @@ There protocol can be explained in the following steps
 - Nope server is ran
 - Client web page is opened, this loads (see How?) the client library and initiates the NopeCLient object
 - NopeClient connects to the NopeServer
-- you call `register` method on the client object passing the chosen client_id (arbitrary character string). If Nope server is get_password-protected, you have to pass the password as well
-- you call `subscribe` on the client object passing the channel name. The channel is a named entity you subscribe to. All the messages are sent (pushed) to a specific channel (or a wildcard '*' channel)
+- you call `register` method on the client object passing the chosen client_id (arbitrary character string). 
+- you call `subscribe` on the client object passing the channel name. The channel is a named entity you subscribe to. If Nope server is get_password-protected, you have to pass the password as well. All the messages are sent (pushed) to a specific channel (or a wildcard '\*' channel)
 - you subscribe your callback function to message arrival event - either a specific event type, or 'all' wildcard  
 - Data source pushes the data to the Nope server. When pushing, the message type and channel are passed, as well as an arbitrary message body. If server is put_password-protected, the password is required as well
 - Nope server send these data to all the clients subscribed to the given channel
@@ -51,7 +51,7 @@ Programmatically - you have to do the following
 
 2) Run the server
 
-    sudo node nope.js
+    node nope.js
 
 3) Prepare the data soure
 
@@ -69,7 +69,6 @@ In case of HTTP push your service has to POST to http://NOPE_HOST:NOPE_PORT/push
 
 4.1. In your web page (the client) add 3 lines
 
-    <script>WEB_SOCKET_SWF_LOCATION='http://NOPE_HOST:NOPE_PORT/socket.io/lib/vendor/web-socket-js/WebSocketMain.swf'</script>
     <script src="http://NOPE_HOST:NOPE_PORT/socket.io/socket.io.js"></script>
     <script src="http://NOPE_HOST:NOPE_PORT/nope-client.js"></script>
 
@@ -80,9 +79,9 @@ In case of HTTP push your service has to POST to http://NOPE_HOST:NOPE_PORT/push
     var client = new NopeClient(NOPE_HOST, NOPE_PORT);               // this connects to the Nope server through the Socket.IO
     
     var client_id = 'user' + parseInt(Math.random() * 1000000, 10);  // create the random user name
-    client.register(client_id, GET_PASSWORD, function(data){         // try registering with the chosen client_id and the GET_PASSWORD (set to empty string if it's not set on the server side)
+    client.register(client_id, function(data){         // try registering with the chosen client_id
       if (data.result == 'ok')           
-          client.subscribe(CHANNEL_NAME, function(data){})           // now subscribe so the channel 
+          client.subscribe(CHANNEL_NAME, GET_PASSWORD, function(data){})           // now subscribe so the channel with the GET_PASSWORD (set to empty string if it's not set on the server side)
     });
     
 4.3. Subscribe to some event
@@ -99,23 +98,23 @@ See example in test/django_project/nope_connect.py for Python example of pushing
 Nope Client Methods
 ===================
 
-`client.register(client_id, password, cb)`
+`client.register(client_id, cb)`
 -------------
 
 Register with the Nope server.
 
 client_id - arbitrary string identifying the current client instance. No checks are done at the moment
 
-password - if get_password is set on the Nope server side, this password should match it, otherwise the registration will fail
-
 cb - callback, the function called when the registration response comes from the server (technically this function is simply subscribed to "registration" event)
 
-`client.subscribe(channel, cb)`
+`client.subscribe(channel, password, cb)`
 -------------
 
 Subscribe to the specific channel. The client can subscribe to multiple channels. The client must be registered before it can subscribe.
 
 channel - arbitrary string identifying the channel.
+
+password - if get_password is set on the Nope server side, this password should match it, otherwise the registration will fail
 
 cb - callback, the function called when the subscription response comes from the server (technically this function is simply subscribed to "subscription" event)
 
