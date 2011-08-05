@@ -19,6 +19,8 @@ var Nope = function () {
     this.channels = {'*': []};
 };
 
+Nope.prototype = new process.EventEmitter();
+
 Nope.prototype.onPush = function (channel, client_id, type, message_body) {
     var i, l, body, message;
     
@@ -37,7 +39,8 @@ Nope.prototype.onPush = function (channel, client_id, type, message_body) {
     };
     for (i = 0, l = channel.length; i < l; i++) {
         channel[i].json.send(message);
-    }    
+    }
+    this.emit('push', arguments);
 }
 
 Nope.prototype.onRegister = function (client, body) {
@@ -53,6 +56,7 @@ Nope.prototype.onRegister = function (client, body) {
           'result': 'ok'
         }
     });
+    this.emit('register', arguments);
 }
 
 Nope.prototype.onSubscribe = function (client, body) {
@@ -89,6 +93,7 @@ Nope.prototype.onSubscribe = function (client, body) {
           'result': 'ok'
         }
     });
+    this.emit('subscribe', arguments);
 }
 
 Nope.prototype.run = function () {
