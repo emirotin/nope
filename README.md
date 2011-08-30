@@ -67,7 +67,7 @@ In case of HTTP push your service has to POST to http://NOPE_HOST:NOPE_PORT/push
     
 4) Prepare the client
 
-4.1. In your web page (the client) add 3 lines
+4.1. In your web page (the client) add 2 lines
 
     <script src="http://NOPE_HOST:NOPE_PORT/socket.io/socket.io.js"></script>
     <script src="http://NOPE_HOST:NOPE_PORT/nope-client.js"></script>
